@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D Tower Defense</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <h1>2D Tower Defense</h1>
+    <div id="debug-info"></div>
+    <div id="gamefield">
+        <div id="background"></div>
+        <div id="buildings"></div>
+        <div id="characters">
+            <div id="enemy"></div>
+            <div id="player"></div>
+        </div>
+    </div>
+    <div id="ui-container">
+        <div id="controls">
+            <h3>Player Controls</h3>
+            <ul>
+                <li><b>Move Left:</b> Arrow Left</li>
+                <li><b>Move Right:</b> Arrow Right</li>
+                <li><b>Move Up:</b> Arrow Up</li>
+                <li><b>Move Down:</b> Arrow Down</li>
+                <li><b>Place Tower:</b> T</li>
+                <li><b>Place Fence:</b> F</li>
+                <li><b>Toggle Debug Mode:</b> D</li>
+            </ul>
+        </div>
+        <div id="description">
+            <h3>Game Description</h3>
+            <p>Welcome to 2D Tower Defense! Your objective is to defend your base from waves of enemies by strategically placing towers and fences on the battlefield. </p>
+            <p>Use the arrow keys to move your character and the 'T' key to place towers. Fences can be placed using the 'F' key. Monitor the debug mode by pressing 'D' to see the debug.</p>
+        </div>
+    <script type="module" src="controller.js"></script>
+    
+</body>
+</html>
