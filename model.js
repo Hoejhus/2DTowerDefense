@@ -1,8 +1,6 @@
 "use strict";
 
-import { displayDebugInfo } from './view.js';
 import { PriorityQueue } from './priorityQueue.js';
-import { isDebugMode } from './debug.js';
 
 export let lastTimeStamp = 0;
 export let deltaTime = 0;
@@ -51,6 +49,9 @@ export function resetGame() {
     enemies.length = 0;
     towers.length = 0;
     enemyQueue.clear();
+
+    document.querySelectorAll("#characters .enemy").forEach(enemy => enemy.remove());
+    document.querySelectorAll("#characters .tower").forEach(tower => tower.remove());
 }
 
 export function checkGoalReached(enemy) {
@@ -68,10 +69,10 @@ export class Node {
     constructor(row, col, g, h, parent = null) {
         this.row = row;
         this.col = col;
-        this.g = g; // Cost from start to this node
-        this.h = h; // Estimated cost from this node to the goal
-        this.f = g + h; // Total cost
-        this.parent = parent; // Parent node in the path
+        this.g = g;
+        this.h = h;
+        this.f = g + h;
+        this.parent = parent;
     }
 }
 
@@ -98,8 +99,8 @@ export function aStar(start, goal) {
     openList.push(startNode);
 
     while (openList.length > 0) {
-        openList.sort((a, b) => a.f - b.f); // Sort nodes by total cost
-        const currentNode = openList.shift(); // Get node with lowest cost
+        openList.sort((a, b) => a.f - b.f);
+        const currentNode = openList.shift();
 
         if (currentNode.row === goal.row && currentNode.col === goal.col) {
             const path = [];
@@ -108,11 +109,6 @@ export function aStar(start, goal) {
                 path.push({ row: node.row, col: node.col });
                 node = node.parent;
             }
-
-            if (isDebugMode()) {
-                displayDebugInfo({ path: path.reverse() });
-            }
-
             return path.reverse();
         }
 
@@ -142,5 +138,5 @@ export function aStar(start, goal) {
         }
     }
 
-    return []; // No path found
+    return [];
 }

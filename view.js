@@ -58,12 +58,53 @@ export function displayEnemiesAtPosition() {
             enemyContainer.appendChild(visualEnemy);
         }
 
-        visualEnemy.style.transform = `translate(${enemy.x}px, ${enemy.y}px)`;
+        visualEnemy.style.transform = `translate(${enemy.x - enemy.regX}px, ${enemy.y - enemy.regY}px)`;
         visualEnemy.style.width = `${TILE_SIZE}px`;
         visualEnemy.style.height = `${TILE_SIZE}px`;
 
         updateHealthBar(enemy, index);
     });
+}
+
+export function respawnEnemyDivs() {
+    const enemyContainer = document.querySelector("#characters");
+
+    // Remove all existing enemy divs
+    enemyContainer.querySelectorAll('.enemy').forEach(enemyDiv => enemyDiv.remove());
+
+    // Recreate enemy divs at their new positions
+    enemies.forEach((enemy, index) => {
+        const visualEnemy = document.createElement('div');
+        visualEnemy.id = `enemy-${index}`;
+        visualEnemy.classList.add('enemy', 'animate');
+        const healthBar = createHealthBar(enemy);
+        visualEnemy.appendChild(healthBar);
+        enemyContainer.appendChild(visualEnemy);
+
+        // Position the enemy div according to the enemy's coordinates
+        visualEnemy.style.transform = `translate(${enemy.x - enemy.regX}px, ${enemy.y - enemy.regY}px)`;
+        visualEnemy.style.width = `${TILE_SIZE}px`;
+        visualEnemy.style.height = `${TILE_SIZE}px`;
+    });
+}
+
+function createHealthBar(enemy) {
+    const healthBar = document.createElement('div');
+    healthBar.classList.add('health-bar');
+    const healthBarInner = document.createElement('div');
+    healthBarInner.classList.add('health-bar-inner');
+    healthBar.appendChild(healthBarInner);
+    return healthBar;
+}
+
+function updateHealthBar(enemy, index) {
+    const visualEnemy = document.querySelector(`#enemy-${index}`);
+    if (visualEnemy) {
+        const healthBarInner = visualEnemy.querySelector('.health-bar-inner');
+        if (healthBarInner) {
+            healthBarInner.style.width = `${(enemy.health / enemy.maxHealth) * 100}%`;
+        }
+    }
 }
 
 export function addTileToBuildings(row, col, type) {
@@ -93,7 +134,7 @@ export function displayArrow(arrow) {
 
     const deltaX = arrow.targetX - arrow.x;
     const deltaY = arrow.targetY - arrow.y;
-    const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+    const angle = Math.atan2(deltaY, deltaX) * (30 / Math.PI);
     arrowElement.style.transform = `translate(${arrow.x}px, ${arrow.y}px) rotate(${angle}deg)`;
 
     const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
@@ -114,41 +155,17 @@ function getClassForTile(tile) {
 }
 
 export function displayDebugInfo(enemy) {
-    const debugContainer = document.querySelector('#debug-info');
-    enemy.path.forEach((node, index) => {
+    enemy.path.forEach((node, stepIndex) => {
         const tileElement = document.getElementById(`tile-${node.row}-${node.col}`);
         if (tileElement) {
             const stepElement = document.createElement('div');
             stepElement.classList.add('debug-step');
-            stepElement.innerText = index;
+            stepElement.innerText = stepIndex;
             tileElement.appendChild(stepElement);
         }
     });
 }
 
 export function clearDebugInfo() {
-    const debugContainer = document.querySelector('#debug-info');
-    while (debugContainer.firstChild) {
-        debugContainer.removeChild(debugContainer.firstChild);
-    }
     document.querySelectorAll('.debug-step').forEach(step => step.remove());
-}
-
-function createHealthBar() {
-    const healthBar = document.createElement('div');
-    healthBar.classList.add('health-bar');
-    const healthBarInner = document.createElement('div');
-    healthBarInner.classList.add('health-bar-inner');
-    healthBar.appendChild(healthBarInner);
-    return healthBar;
-}
-
-function updateHealthBar(enemy, index) {
-    const visualEnemy = document.querySelector(`#enemy-${index}`);
-    if (visualEnemy) {
-        const healthBarInner = visualEnemy.querySelector('.health-bar-inner');
-        if (healthBarInner) {
-            healthBarInner.style.width = `${(enemy.health / enemy.maxHealth) * 100}%`;
-        }
-    }
 }

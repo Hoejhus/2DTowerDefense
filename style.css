@@ -1,182 +1,3 @@
-#gamefield {
-    border: 1px solid rgb(0, 0, 0);
-    width: fit-content;
-    display: grid;
-    background-color: rgb(0, 0, 0, 0.5);
-}
-
-#background {
-    grid-area: 1 / 1;
-    display: grid;
-    grid-template-columns: repeat(var(--GRID_HEIGHT), var(--TILE_SIZE));
-}
-
-#background .tile {
-    width: var(--TILE_SIZE);
-    aspect-ratio: 1 / 1;
-    background-repeat: no-repeat;
-    background-size: 100%;
-    image-rendering: pixelated;
-}
-
-#buildings {
-    grid-area: 1 / 1;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-}
-
-body {
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    background: linear-gradient(90deg, rgb(156, 15, 15) 0%, rgb(206, 207, 141) 100%);
-}
-
-.tile.water {
-    background-image: url('tiles/water.png');
-}
-
-.tile.tree {
-    background-image: url('tiles/tree.png');
-}
-
-.tile.grass {
-    background-image: url('tiles/grass.png');
-}
-
-.tile.flower {
-    background-image: url('tiles/flowers.png');
-}
-
-.tile.fence_hori {
-    background-image: url('buildings/fence_hori.png');
-    background-size: cover;
-}
-
-.tile.fence_vert {
-    background-image: url('buildings/fence_vert.png');
-    background-size: cover;
-}
-
-.tile.tower {
-    background-image: url('buildings/pot.png');
-    position: absolute;
-    background-size: cover;
-}
-
-.arrow {
-    width: 16px;
-    height: 4px;
-    background-image: url('buildings/arrow.png'); 
-    background-size: contain;
-    position: absolute;
-    z-index: 2;
-}
-
-.tile.tower_broken {
-    background-image: url('buildings/pot_smashed.png');
-    position: absolute;
-    background-size: cover;
-}
-
-#characters {
-    grid-area: 1 / 1;
-}
-
-#player {
-    outline: 2px dashed rgb(200, 255, 0);
-    position: absolute;
-}
-
-.enemy {
-    aspect-ratio: 1 / 1;
-    width: 32px;
-    background-image: url('enemies/Character 5.png');
-    background-size: 400% 400%;
-    position: pixelated;
-}
-
-.enemy .health-bar {
-    position: absolute;
-    top: -10px;
-    left: 0;
-    height: 4px;
-    width: 100%;
-    background-color: red;
-    z-index: 1;
-}
-
-.enemy .health-bar-inner {
-    height: 100%;
-    background-color: green;
-}
-
-.arrow {
-    width: 16px;
-    height: 4px;
-    background-image: url('buildings/arrow.png');
-    background-size: contain;
-    position: absolute;
-    z-index: 2;
-}
-
-.debug-step {
-    position: absolute;
-    color: red;
-    font-size: 12px;
-    font-weight: bold;
-    background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-
-.enemy.animate {
-    animation-duration: 1s;
-    animation-timing-function: steps(4);
-    animation-iteration-count: infinite;
-}
-
-.enemy.down {
-    background-position: 0% 0%;
-    animation-name: down;
-}
-
-.enemy.up {
-    background-position: 0% -100%;
-    animation-name: up;
-}
-
-.enemy.left {
-    background-position: 0% -200%;
-    animation-name: left;
-}
-
-.enemy.right {
-    background-position: 0% -300%;
-    animation-name: right;
-}
-
-.health-bar {
-    position: absolute;
-    width: 32px;
-    height: 5px;
-    background-color: red;
-    top: -10px;
-}
-
-.health-bar-inner {
-    height: 100%;
-    background-color: green;
-}
-
-/* styles.css */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -184,7 +5,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #f0f0f0;
+    background: linear-gradient(90deg, rgb(156, 15, 15) 0%, rgb(206, 207, 141) 100%);
+    overflow: hidden;
 }
 
 #game-container {
@@ -235,7 +57,190 @@ body {
     line-height: 1.5;
 }
 
+#gamefield {
+    border: 1px solid rgb(0, 0, 0);
+    width: fit-content;
+    display: grid;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.5);
+}
 
+#background {
+    grid-area: 1 / 1;
+    display: grid;
+    grid-template-columns: repeat(var(--GRID_WIDTH), var(--TILE_SIZE));
+    grid-template-rows: repeat(var(--GRID_HEIGHT), var(--TILE_SIZE));
+}
+
+#background .tile {
+    width: var(--TILE_SIZE);
+    height: var(--TILE_SIZE);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    image-rendering: pixelated;
+}
+
+#buildings, #characters {
+    grid-area: 1 / 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+#characters .enemy {
+    position: absolute;
+    width: var(--TILE_SIZE);
+    height: var(--TILE_SIZE);
+    background-image: url('enemies/Character 5.png');
+    background-size: 400% 400%;
+    image-rendering: pixelated;
+}
+
+.tile.water {
+    background-image: url('tiles/water.png');
+}
+
+.tile.tree {
+    background-image: url('tiles/tree.png');
+}
+
+.tile.grass {
+    background-image: url('tiles/grass.png');
+}
+
+.tile.flower {
+    background-image: url('tiles/flowers.png');
+}
+
+.tile.fence_hori {
+    background-image: url('buildings/fence_hori.png');
+    background-size: cover;
+}
+
+.tile.fence_vert {
+    background-image: url('buildings/fence_vert.png');
+    background-size: cover;
+}
+
+.tile.tower {
+    background-image: url('buildings/pot.png');
+    position: absolute;
+    background-size: cover;
+}
+
+.tile.tower_broken {
+    background-image: url('buildings/pot_smashed.png');
+    position: absolute;
+    background-size: cover;
+}
+
+#score {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    color: white;
+    background-color: rgba(187, 153, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+#player {
+    outline: none;
+    position: absolute;
+    width: var(--TILE_SIZE);
+    height: var(--TILE_SIZE);
+    border: 1px solid rgb(0, 123, 205);
+    box-shadow: 5 5 20px 5px rgb(0, 123, 205);
+    border-radius: 10%;
+    animation: player-glow 2s infinite alternate;
+}
+
+@keyframes player-glow {
+    from {
+        box-shadow: 0 0 10px 3px rgba(58, 176, 255, 0.911);
+    }
+    to {
+        box-shadow: 0 0 20px 5px rgba(0, 119, 255, 0.75);
+    }
+}
+
+.enemy .health-bar {
+    position: absolute;
+    top: -10px;
+    left: 0;
+    height: 4px;
+    width: 100%;
+    background-color: red;
+    z-index: 1;
+}
+
+.enemy .health-bar-inner {
+    height: 100%;
+    background-color: green;
+}
+
+.arrow {
+    width: 32px;
+    height: 8px;
+    background-image: url('buildings/arrow.png'); 
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    z-index: 2;
+    image-rendering: pixelated;
+}
+
+.debug-step {
+    position: absolute;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 25%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.89);
+    background-color: transparent;
+    border: none;
+    box-shadow: 0 0 10px rgba(232, 232, 232, 0.582);
+    transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+}
+
+.enemy {
+    position: absolute;
+    width: var(--TILE_SIZE);
+    height: var(--TILE_SIZE);
+    background-image: url('enemies/Character 5.png');
+    background-size: 400% 400%;
+    image-rendering: pixelated;
+    animation-duration: 1s;
+    animation-timing-function: steps(4);
+    animation-iteration-count: infinite;
+}
+
+.enemy.down {
+    background-position: 0% 0%;
+    animation-name: down;
+}
+
+.enemy.left {
+    background-position: 0% -200%;
+    animation-name: left;
+}
+
+.enemy.right {
+    background-position: 0% -300%;
+    animation-name: right;
+}
+
+.enemy.up {
+    background-position: 0% -100%;
+    animation-name: up;
+}
 
 @keyframes down {
     from {
